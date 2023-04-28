@@ -9,9 +9,10 @@ namespace Program
 {
     class Citronzale
     {
-        public static void Main(string[] args)
+        public void Main(string[] args) 
         {
-            LogSign.Print();
+            LogSign starter = new LogSign();
+            starter.Starter();
         }
     }
 }
