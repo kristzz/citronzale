@@ -78,11 +78,16 @@ namespace LogSignIn
 
             if (userCredentials.ContainsKey(username) && userCredentials[username] == password)
             {
+                Console.Clear();
                 Console.WriteLine("Login successful!");
             }
             else
             {
+                Console.Clear();
                 Console.WriteLine("Invalid username or password. Please try again.");
+                Thread.Sleep(1500); // sleep 1,5 sek
+                Console.Clear();
+                LogIn();
             }
         }
 

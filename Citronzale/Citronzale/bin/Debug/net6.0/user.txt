@@ -1,3 +1,6 @@
 krists,emils,kristaps,1234,Deluxe
 krists,emils,kristzz,juhu1234,Deluxe
 marcis,idiots,duzis,1234,Deluxe
+mauglis,pidars,mauglis,12345,Flex
+kurpe,tupele,krievs,sieva123,Super
+,,,,Regular
