@@ -4,3 +4,4 @@ marcis,idiots,duzis,1234,Deluxe
 mauglis,pidars,mauglis,12345,Flex
 kurpe,tupele,krievs,sieva123,Super
 ,,,,Regular
+ola,maize,krupis1,1212,Deluxe

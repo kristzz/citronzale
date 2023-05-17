@@ -1,21 +1,38 @@
-using System;
-
 using LogSignIn;
+using System;
+using System.IO;
 
 namespace Profile
 {
-    class PersonalProfile
+
+    public class UserInfoReader
     {
-        
-        public void Main(string[] args)
+        public static void ReadUserInfo(string filePath, string targetUsername)
         {
-            var user = new PersonalProfile();
-            user.userInfo();
-        }
+            // Read the contents of the text file
+            string[] lines = File.ReadAllLines(filePath);
 
-        public void userInfo()
-        {
+            // Find the profile with the matching username and display the information in the console
+            foreach (string line in lines)
+            {
+                string[] fields = line.Split(','); // Split the line using the comma as the delimiter
 
+                // Assuming the order of fields is: name, last name, username, password, and additional details
+                string name = fields[0];
+                string lastName = fields[1];
+                string username = fields[2];
+                string additionalDetails = fields[4];
+
+                if (username == targetUsername)
+                {
+                    Console.WriteLine("Name: " + name);
+                    Console.WriteLine("Last Name: " + lastName);
+                    Console.WriteLine("Username: " + username);
+                    Console.WriteLine("Subscription type: " + additionalDetails);
+                    Console.WriteLine();
+                    break; // Exit the loop after finding the matching profile
+                }
+            }
         }
     }
 }

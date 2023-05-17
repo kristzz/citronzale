@@ -80,6 +80,11 @@ namespace LogSignIn
             {
                 Console.Clear();
                 Console.WriteLine("Login successful!");
+                Thread.Sleep(1500); // sleep 1,5 sek
+                Console.Clear();
+                string targetUsername = username;
+                UserInfoReader.ReadUserInfo(fileName, targetUsername);
+
             }
             else
             {
