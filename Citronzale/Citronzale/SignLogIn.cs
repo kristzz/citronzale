@@ -12,14 +12,12 @@ namespace LogSignIn
 {
     class LogSign
     {
-        static List<string> lines;
-        static string creationPassword = "";
-        static string filepath = "pass.txt";
-
-        public string password;
-
+        static Dictionary<string, string> userCredentials = new Dictionary<string, string>();
+        const string fileName = "user.txt";
         public static void Main(string[] args)
         {
+            var save = new LogSign();
+            save.LoadUserCredentials();
             var starter = new LogSign();
             starter.Starter();
         }
@@ -43,86 +41,144 @@ namespace LogSignIn
             var exit = new LogSign();
             var options = new LogSign();
 
-            if (!File.Exists(filepath))
-                File.Create(filepath);
-            lines = new List<string>(File.ReadAllLines(filepath));
-
             Console.WriteLine("======================================================================");
             Console.WriteLine("1. Sign Up and create a new profile");
             Console.WriteLine("2. Log In to your profile");
             Console.WriteLine("3. Exit");
             Console.WriteLine("======================================================================");
-            double input = double.Parse(Console.ReadLine());
+            string choice = Console.ReadLine();
             Console.Clear();
 
-            switch (input)
+            switch (choice)
             {
-                case 1:
-                    signup.SignUp();
+                case "1":
+                    SignUp();
                     break;
-                case 2:
-                    login.LogIn();
+                case "2":
+                    LogIn();
                     break;
-                case 3:
-                    exit.Exit();
+                case "3":
+                    Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("Incorrect input, try again");
+                    Console.WriteLine("Invalid choice. Please try again.");
                     Thread.Sleep(1500); // 1.5s sleep
                     Console.Clear();
-                    options.Options();
+                    Options();
                     break;
             }
         }
 
         public void LogIn()
         {
-            var options = new LogSign();
-            var userProfile = new PersonalProfile();
+            Console.Write("Enter your username: ");
+            string username = Console.ReadLine();
+            Console.Write("Enter your password: ");
+            string password = Console.ReadLine();
 
-            Console.WriteLine("\nEnter Your Password");
-            password = Console.ReadLine();
-            if (userPass(password))
+            if (userCredentials.ContainsKey(username) && userCredentials[username] == password)
             {
-                Console.WriteLine("You've successfully logged in.");
-                Console.WriteLine("Sveiki " + password);
-                userProfile.userInfo();
+                Console.WriteLine("Login successful!");
             }
             else
             {
-                Console.WriteLine("Password not found");
-                Thread.Sleep(1500); // 1.5s sleep
-                Console.Clear();
-                options.Options();
-            }  
-        }
-
-        static Boolean userPass(string psw)
-        {
-            foreach (var item in lines)
-            {
-                if (item == psw)
-                    return true;
+                Console.WriteLine("Invalid username or password. Please try again.");
             }
-            return false; //japievieno lai parbauda ne tikai paroli bet ari username
         }
 
         public void SignUp()
         {
-            var options = new LogSign();
+            Console.Write("Enter your name: ");
+            string name = Console.ReadLine();
+            Console.Write("Enter your surname: ");
+            string surname = Console.ReadLine();
+            Console.Write("Enter your username: ");
+            string username = Console.ReadLine();
+            Console.Write("Enter your password: ");
+            string password = Console.ReadLine();
 
-            Console.WriteLine("Create your password:"); //japievieno lai var ari uztaisit username
-            creationPassword = Console.ReadLine();
-            lines.Add(creationPassword);
-            File.WriteAllLines(filepath, lines);
-            Console.WriteLine("You've successfully Signed Up.");
-            Thread.Sleep(1500); // 1.5s sleep
+            if (userCredentials.ContainsKey(username))
+            {
+                Console.WriteLine("Username already exists. Please choose a different username.");
+                Thread.Sleep(1500); //1.5s sleep
+                Console.Clear();
+                SignUp();
+                return;
+            }
+
+            string membership = GetMembershipOption();
+
+            // Save user information in the dictionary
+            userCredentials[username] = password;
+
+            // Save user information in a text file
+            string userData = $"{name},{surname},{username},{password},{membership}";
+            SaveUserData(userData);
+
+            Console.WriteLine("Sign up successful! You can now log in!");
+            Thread.Sleep(1500); //1.5s sleep
             Console.Clear();
-            options.Options();
+            Options();
         }
-        public void Exit()
+
+        static string GetMembershipOption()
         {
-            Environment.Exit(0);
+            Console.WriteLine("Membership Options:");
+            Console.WriteLine("1. Regular");
+            Console.WriteLine("2. Flex");
+            Console.WriteLine("3. Super");
+            Console.WriteLine("4. Deluxe");
+            Console.Write("Choose your membership option (1-4): ");
+            string membershipOption = Console.ReadLine();
+
+            // Validate membership option
+            if (!int.TryParse(membershipOption, out int membershipIndex) || membershipIndex < 1 || membershipIndex > 4)
+            {
+                Console.WriteLine("Invalid membership option. Please try again.");
+                return GetMembershipOption();
+            }
+
+            return GetMembershipByIndex(membershipIndex);
+        }
+
+        static string GetMembershipByIndex(int index)
+        {
+            switch (index)
+            {
+                case 1:
+                    return "Regular";
+                case 2:
+                    return "Flex";
+                case 3:
+                    return "Super";
+                case 4:
+                    return "Deluxe";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public void LoadUserCredentials()
+        {
+            if (File.Exists(fileName))
+            {
+                string[] lines = File.ReadAllLines(fileName);
+                foreach (string line in lines)
+                {
+                    string[] userData = line.Split(',');
+                    string username = userData[2];
+                    string password = userData[3];
+                    userCredentials[username] = password;
+                }
+            }
+        }
+
+        static void SaveUserData(string userData)
+        {
+            using (StreamWriter sw = File.AppendText(fileName))
+            {
+                sw.WriteLine(userData);
+            }
         }
     }
 }

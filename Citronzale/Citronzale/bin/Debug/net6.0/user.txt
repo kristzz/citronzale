@@ -1,0 +1,3 @@
+krists,emils,kristaps,1234,Deluxe
+krists,emils,kristzz,juhu1234,Deluxe
+marcis,idiots,duzis,1234,Deluxe
