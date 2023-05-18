@@ -80,12 +80,63 @@ namespace LogSignIn
             {
                 Console.Clear();
                 Console.WriteLine("Login successful!");
-                Thread.Sleep(1500); // sleep 1,5 sek
+                Thread.Sleep(2000); // sleep 2 sek
                 Console.Clear();
-                string targetUsername = username;
-                UserInfoReader.ReadUserInfo(fileName, targetUsername);
+                LoggedInOptions();
 
+                void LoggedInOptions()
+                {
+                    Console.WriteLine("1. View profile");
+                    Console.WriteLine("2. Log out");
+                    Console.WriteLine("3. Exit");
+
+                    string choice = Console.ReadLine();
+
+                    string targetUsername = username;
+
+                    bool stopProgram = false;
+
+                    while (!stopProgram) {
+
+                        switch (choice)
+                        {
+                            case "1":
+                                Console.Clear();
+                                UserInfoReader.ReadUserInfo(fileName, targetUsername);
+                                Console.WriteLine();
+                                Console.WriteLine("Press any key to return to the selection...");
+                                Console.ReadKey();
+                                Console.Clear();
+                                LoggedInOptions();
+                                return;
+                            
+                            case "2":
+                                Console.Clear();
+                                Options();
+                                break;
+
+                            case "3":
+                                stopProgram = true;
+                                break;
+
+                            default:
+                                Console.WriteLine("Invalid choice! Please try again.");
+                                Thread.Sleep(1500);
+                                Console.Clear();
+                                LoggedInOptions();
+
+                                break;
+
+
+
+                        }
+
+                    }
+
+                }
             }
+
+
             else
             {
                 Console.Clear();
