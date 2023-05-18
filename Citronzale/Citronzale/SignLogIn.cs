@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using Profile;
+using Citronzale.Admin;
+using Citronzale;
 
 namespace LogSignIn
 {
@@ -14,6 +16,9 @@ namespace LogSignIn
     {
         static Dictionary<string, string> userCredentials = new Dictionary<string, string>();
         const string fileName = "user.txt";
+
+        private static string filePath = "user.txt";
+        private static StreamWriter file;
         public static void Main(string[] args)
         {
             var save = new LogSign();
@@ -40,6 +45,8 @@ namespace LogSignIn
             var signup = new LogSign();
             var exit = new LogSign();
             var options = new LogSign();
+
+            AdminFeatures admin = new AdminFeatures();
 
             Console.WriteLine("======================================================================");
             Console.WriteLine("1. Sign Up and create a new profile");
@@ -71,6 +78,8 @@ namespace LogSignIn
 
         public void LogIn()
         {
+            AdminFeatures admin = new AdminFeatures();
+
             Console.Write("Enter your username: ");
             string username = Console.ReadLine();
             Console.Write("Enter your password: ");
@@ -132,8 +141,15 @@ namespace LogSignIn
 
                 }
             }
-
-
+            else if (username == "admin" && password == "admin")
+            {
+                Console.Clear();
+                using (var file = new StreamWriter(filePath, true))
+                {
+                    AdminFeatures adminfeatures = new AdminFeatures();
+                    adminfeatures.AdminCommands(file); // Pass the file as an argument to the AdminCommands method
+                }
+            }
             else
             {
                 Console.Clear();
