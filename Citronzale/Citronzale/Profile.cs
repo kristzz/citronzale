@@ -25,10 +25,12 @@ namespace Profile
 
                 if (username == targetUsername)
                 {
+                    Console.WriteLine("======================================================================");
                     Console.WriteLine("Name: " + name);
                     Console.WriteLine("Last Name: " + lastName);
                     Console.WriteLine("Username: " + username);
                     Console.WriteLine("Subscription type: " + additionalDetails);
+                    Console.WriteLine("======================================================================");
                     Console.WriteLine();
                     break; // Exit the loop after finding the matching profile
                 }

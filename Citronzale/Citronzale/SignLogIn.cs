@@ -86,9 +86,10 @@ namespace LogSignIn
 
                 void LoggedInOptions()
                 {
+                    Console.WriteLine("======================================================================");
                     Console.WriteLine("1. View profile");
                     Console.WriteLine("2. Log out");
-                    Console.WriteLine("3. Exit");
+                    Console.WriteLine("======================================================================");
 
                     string choice = Console.ReadLine();
 
@@ -115,16 +116,12 @@ namespace LogSignIn
                                 Options();
                                 break;
 
-                            case "3":
-                                stopProgram = true;
-                                break;
-
                             default:
+                                Console.Clear();
                                 Console.WriteLine("Invalid choice! Please try again.");
                                 Thread.Sleep(1500);
                                 Console.Clear();
                                 LoggedInOptions();
-
                                 break;
 
 
