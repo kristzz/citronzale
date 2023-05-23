@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography;
 using Profile;
 using Citronzale.Admin;
 using Citronzale;
@@ -20,6 +20,7 @@ namespace LogSignIn
 
         private static string filePath = "user.txt";
         private static StreamWriter file;
+
         public static void Main(string[] args)
         {
             var save = new LogSign();
@@ -37,7 +38,7 @@ namespace LogSignIn
             Console.WriteLine("We offer many great gym locations and trainers to train with!");
             Console.WriteLine("Choose what you want to do:");
 
-            options.Options(); 
+            options.Options();
         }
 
         public void Options()
@@ -84,13 +85,13 @@ namespace LogSignIn
             Console.Write("Enter your username: ");
             string username = Console.ReadLine();
             Console.Write("Enter your password: ");
-            string password = Console.ReadLine();
+            string password = ReadPassword();
 
-            if (userCredentials.ContainsKey(username) && userCredentials[username] == password)
+            if (userCredentials.ContainsKey(username) && ValidatePassword(password, userCredentials[username]))
             {
                 Console.Clear();
                 Console.WriteLine("Login successful!");
-                Thread.Sleep(2000); // sleep 2 sek
+                Thread.Sleep(2000); // sleep 2 seconds
                 Console.Clear();
                 LoggedInOptions();
 
@@ -107,7 +108,8 @@ namespace LogSignIn
 
                     bool stopProgram = false;
 
-                    while (!stopProgram) {
+                    while (!stopProgram)
+                    {
 
                         switch (choice)
                         {
@@ -120,7 +122,7 @@ namespace LogSignIn
                                 Console.Clear();
                                 LoggedInOptions();
                                 return;
-                            
+
                             case "2":
                                 Console.Clear();
                                 Options();
@@ -133,13 +135,8 @@ namespace LogSignIn
                                 Console.Clear();
                                 LoggedInOptions();
                                 break;
-
-
-
                         }
-
                     }
-
                 }
             }
             else if (username == "admin" && password == "admin")
@@ -155,7 +152,7 @@ namespace LogSignIn
             {
                 Console.Clear();
                 Console.WriteLine("Invalid username or password. Please try again.");
-                Thread.Sleep(1500); // sleep 1,5 sek
+                Thread.Sleep(1500); // sleep 1.5 seconds
                 Console.Clear();
                 LogIn();
             }
@@ -170,7 +167,7 @@ namespace LogSignIn
             Console.Write("Enter your username: ");
             string username = Console.ReadLine();
             Console.Write("Enter your password: ");
-            string password = Console.ReadLine();
+            string password = ReadPassword();
             GymLocations gymLocations = new GymLocations();
             string location = gymLocations.ChooseLocation();
 
@@ -185,11 +182,14 @@ namespace LogSignIn
 
             string membership = GetMembershipOption();
 
+            // Hash the password
+            string hashedPassword = HashPassword(password);
+
             // Save user information in the dictionary
-            userCredentials[username] = password;
+            userCredentials[username] = hashedPassword;
 
             // Save user information in a text file
-            string userData = $"{name},{surname},{username},{password},{membership}, {location}";
+            string userData = $"{name},{surname},{username},{hashedPassword},{membership}, {location}";
             SaveUserData(userData);
 
             Console.WriteLine("Sign up successful! You can now log in!");
@@ -256,6 +256,47 @@ namespace LogSignIn
             {
                 sw.WriteLine(userData);
             }
+        }
+
+        private static string HashPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(hashedBytes);
+            }
+        }
+
+        private static bool ValidatePassword(string password, string hashedPassword)
+        {
+            string inputHashedPassword = HashPassword(password);
+            return inputHashedPassword == hashedPassword;
+        }
+
+        // Securely read password input with asterisks
+        private static string ReadPassword()
+        {
+            StringBuilder password = new StringBuilder();
+            ConsoleKeyInfo key;
+
+            do
+            {
+                key = Console.ReadKey(true);
+
+                if (key.Key != ConsoleKey.Backspace && key.Key != ConsoleKey.Enter)
+                {
+                    password.Append(key.KeyChar);
+                    Console.Write("*");
+                }
+                else if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+                {
+                    password.Remove(password.Length - 1, 1);
+                    Console.Write("\b \b");
+                }
+            } while (key.Key != ConsoleKey.Enter);
+
+            Console.WriteLine();
+            return password.ToString();
         }
     }
 }
