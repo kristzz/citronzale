@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\emils\\source\\repos\\citronzale\\Citronzale\\Citronzale\\Citronzale.csproj": {}
+    "C:\\Users\\User\\Source\\Repos\\citronzale\\Citronzale\\Citronzale\\Citronzale.csproj": {}
   },
   "projects": {
-    "C:\\Users\\emils\\source\\repos\\citronzale\\Citronzale\\Citronzale\\Citronzale.csproj": {
+    "C:\\Users\\User\\Source\\Repos\\citronzale\\Citronzale\\Citronzale\\Citronzale.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emils\\source\\repos\\citronzale\\Citronzale\\Citronzale\\Citronzale.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Source\\Repos\\citronzale\\Citronzale\\Citronzale\\Citronzale.csproj",
         "projectName": "Citronzale",
-        "projectPath": "C:\\Users\\emils\\source\\repos\\citronzale\\Citronzale\\Citronzale\\Citronzale.csproj",
-        "packagesPath": "C:\\Users\\emils\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emils\\source\\repos\\citronzale\\Citronzale\\Citronzale\\obj\\",
+        "projectPath": "C:\\Users\\User\\Source\\Repos\\citronzale\\Citronzale\\Citronzale\\Citronzale.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Source\\Repos\\citronzale\\Citronzale\\Citronzale\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\emils\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -59,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

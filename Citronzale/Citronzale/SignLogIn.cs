@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using Profile;
 using Citronzale.Admin;
 using Citronzale;
+using Locations;
 
 namespace LogSignIn
 {
@@ -170,6 +171,8 @@ namespace LogSignIn
             string username = Console.ReadLine();
             Console.Write("Enter your password: ");
             string password = Console.ReadLine();
+            GymLocations gymLocations = new GymLocations();
+            string location = gymLocations.ChooseLocation();
 
             if (userCredentials.ContainsKey(username))
             {
@@ -186,7 +189,7 @@ namespace LogSignIn
             userCredentials[username] = password;
 
             // Save user information in a text file
-            string userData = $"{name},{surname},{username},{password},{membership}";
+            string userData = $"{name},{surname},{username},{password},{membership}, {location}";
             SaveUserData(userData);
 
             Console.WriteLine("Sign up successful! You can now log in!");
