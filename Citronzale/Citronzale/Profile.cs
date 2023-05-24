@@ -73,7 +73,7 @@ namespace Profile
                     Console.WriteLine("1. Password");
                     Console.WriteLine("2. Gym location");
                     Console.WriteLine("3. Membership");
-                    Console.WriteLine("4. Exit");
+                    Console.WriteLine("4. Return back");
                     Console.WriteLine("======================================================================");
 
                     string editChoice = Console.ReadLine();
@@ -87,7 +87,8 @@ namespace Profile
                             string hashedPassword = HashPassword(newPassword);
                             fields[3] = hashedPassword;
                             Console.WriteLine("Password updated successfully.");
-                            Thread.Sleep(1000);
+                            Console.WriteLine("Your new password will be active after you reopen our app");
+                            Thread.Sleep(2000);
                             break;
 
                         case "2":

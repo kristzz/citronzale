@@ -7,8 +7,6 @@ namespace Locations
 {
     public class GymLocations
     {
-        // Other class members and methods...
-
         public string ChooseLocation()
         {
             string[] fields = File.ReadAllLines("user.txt");
@@ -31,19 +29,19 @@ namespace Locations
                     Console.WriteLine("1. Maskavas iela 64, Imanta");
                     location = "Maskavas iela 64. Imanta";
                     fields = AddLocationToFields(fields, location);
-                    ShowLocation(location);
+                    DisplayLocation(location);
                     break;
                 case "2":
                     Console.WriteLine("2. Bumbieru iela 12, Pļavinieki");
                     location = "Bumbieru iela 12. Pļavinieki";
                     fields = AddLocationToFields(fields, location);
-                    ShowLocation(location);
+                    DisplayLocation(location);
                     break;
                 case "3":
                     Console.WriteLine("3. Maiznieku iela 2, Bolderāja");
                     location = "Maiznieku iela 2. Bolderāja";
                     fields = AddLocationToFields(fields, location);
-                    ShowLocation(location);
+                    DisplayLocation(location);
                     break;
                 default:
                     Console.WriteLine("Incorrect option. Please try again!");
@@ -60,16 +58,23 @@ namespace Locations
 
         private string[] AddLocationToFields(string[] fields, string location)
         {
-            for (int i = 0; i < fields.Length; i++)
-            {
-                // Append the gym location to each line
-                fields[i] += "," + location;
-            }
+            // Get the index of the last line (current user's data)
+            int userIndex = fields.Length - 1;
+
+            // Split the user's data into individual fields
+            string[] userFields = fields[userIndex].Split(',');
+
+            // Add the selected location to the last field of the user's data
+            userFields = userFields.Take(userFields.Length - 1).ToArray(); // Remove the previous location if any
+            userFields = userFields.Append(location).ToArray();
+
+            // Combine the fields back into a single line
+            fields[userIndex] = string.Join(",", userFields);
 
             return fields;
         }
 
-        private void ShowLocation(string location)
+        private void DisplayLocation(string location)
         {
             Console.WriteLine("Location: " + location);
         }
