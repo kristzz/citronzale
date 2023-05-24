@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace Citronzale.Admin
 {
     public class AdminFeatures
     {
+        private static string lastSortOption;
+
         public void AdminCommands(StreamWriter file)
         {
             LogSignIn.LogSign options = new LogSignIn.LogSign();
 
             if (file == null)
             {
-                string filePath = @"C:\Users\emils\source\repos\citronzale\Citronzale\Citronzale\bin\Debug\net6.0\user.txt";
+                string filePath = "user.txt";
                 file = new StreamWriter(filePath, true);
             }
 
@@ -38,6 +40,7 @@ namespace Citronzale.Admin
                     options.Options();
                     break;
                 default:
+
                     Console.WriteLine("Invalid choice. Please try again.");
                     Thread.Sleep(1500); // 1.5s sleep
                     Console.Clear();
@@ -63,48 +66,10 @@ namespace Citronzale.Admin
                 Console.Write("Choose a sort option (1-3): ");
                 string sortOption = Console.ReadLine();
 
-                switch (sortOption)
-                {
-                    case "1":
-                        fileData.Sort((line1, line2) =>
-                        {
-                            string[] fields1 = line1.Split(',');
-                            string[] fields2 = line2.Split(',');
+                // Update the last sort option
+                lastSortOption = sortOption;
 
-                            string name1 = fields1[0]; // Extract the name field from line1
-                            string name2 = fields2[0]; // Extract the name field from line2
-
-                            return string.Compare(name1, name2, StringComparison.OrdinalIgnoreCase);
-                        });
-                        break;
-                    case "2":
-                        fileData.Sort((line1, line2) =>
-                        {
-                            string[] fields1 = line1.Split(',');
-                            string[] fields2 = line2.Split(',');
-
-                            string surname1 = fields1[1]; // Extract the surname field from line1
-                            string surname2 = fields2[1]; // Extract the surname field from line2
-
-                            return string.Compare(surname1, surname2, StringComparison.OrdinalIgnoreCase);
-                        });
-                        break;
-                    case "3":
-                        fileData.Sort((line1, line2) =>
-                        {
-                            string[] fields1 = line1.Split(',');
-                            string[] fields2 = line2.Split(',');
-
-                            string membership1 = fields1[4]; // Extract the membership field from line1
-                            string membership2 = fields2[4]; // Extract the membership field from line2
-
-                            return string.Compare(membership1, membership2, StringComparison.OrdinalIgnoreCase);
-                        });
-                        break;
-                    default:
-                        Console.WriteLine("Invalid sort option. Skipping sorting.");
-                        break;
-                }
+                SortData(fileData, sortOption);
 
                 Console.WriteLine("Sorted Data:");
             }
@@ -113,10 +78,7 @@ namespace Citronzale.Admin
                 Console.WriteLine("Original Data:");
             }
 
-            foreach (string line in fileData)
-            {
-                Console.WriteLine(line);
-            }
+            PrintTable(fileData);
 
             Console.WriteLine();
 
@@ -147,19 +109,42 @@ namespace Citronzale.Admin
                 catch (IOException)
                 {
                     retryCount++;
-                    Thread.Sleep(1000); // Wait for 1 second before retrying
+                    Thread.Sleep(100); // Wait for 0.1 second before retrying
                 }
             }
 
             if (fileLocked)
             {
-                var optionsaftersort = new AdminFeatures();
-                optionsaftersort.OptionsAfterSort(file);
+                var optionsAfterSort = new AdminFeatures();
+                optionsAfterSort.OptionsAfterSort(file);
             }
         }
 
+        public static void PrintTable(List<string> fileData)
+        {
+            const int tableWidth = 90;
+            const char separator = '-';
+            const char corner = '-';
 
+            Console.WriteLine(new string(corner, tableWidth));
+            Console.WriteLine($"| {"Name",-20} | {"Surname",-20} | {"Username",-20} | {"Membership",-20} |");
+            Console.WriteLine(new string(corner, tableWidth));
 
+            foreach (string line in fileData)
+            {
+                string[] fields = line.Split(',');
+
+                string name = fields[0];
+                string surname = fields[1];
+                string username = fields[2];
+                string membership = fields[4];
+
+                Console.WriteLine($"| {name,-20} | {surname,-20} | {username,-20} | {membership,-20} |");
+                Console.WriteLine(new string(separator, tableWidth));
+            }
+
+            Console.WriteLine();
+        }
 
         private static List<string> ReadFileContents(string filePath)
         {
@@ -185,10 +170,11 @@ namespace Citronzale.Admin
         {
             Console.WriteLine("Choose what to do next:");
             Console.WriteLine("1. Sort again but differently");
-            Console.WriteLine("2. Go back to the admin menu");
+            Console.WriteLine("2. Find something specific");
+            Console.WriteLine("3. Go back to the admin menu");
 
-            string OptionAfterSort = Console.ReadLine();
-            switch (OptionAfterSort)
+            string optionAfterSort = Console.ReadLine();
+            switch (optionAfterSort)
             {
                 case "1":
                     Console.Clear();
@@ -196,9 +182,134 @@ namespace Citronzale.Admin
                     file.Close();
                     break;
                 case "2":
+                    Console.Clear();
+                    SearchAndPrintTable(ReadFileContents("user.txt"), file);
+                    break;
+                case "3":
                     file.Close(); // Close the file
                     Console.Clear();
                     AdminCommands(file);
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    Thread.Sleep(1500); // 1.5s sleep
+                    Console.Clear();
+                    OptionsAfterSort(file);
+                    break;
+            }
+        }
+
+        public static void SearchAndPrintTable(List<string> fileData, StreamWriter file)
+        {
+            const int tableWidth = 90;
+            const char separator = '-';
+            const char corner = '-';
+            const ConsoleColor searchHighlightColor = ConsoleColor.Yellow;
+
+            Console.WriteLine("Enter a search term:");
+            string searchTerm = Console.ReadLine()?.Trim();
+
+            Console.WriteLine(new string(corner, tableWidth));
+            Console.WriteLine($"| {"Name",-20} | {"Surname",-20} | {"Username",-20} | {"Membership",-20} |");
+            Console.WriteLine(new string(corner, tableWidth));
+
+            // Sort the data based on the last chosen sort option
+            SortData(fileData, lastSortOption);
+
+            foreach (string line in fileData)
+            {
+                string[] fields = line.Split(',');
+
+                string name = fields[0];
+                string surname = fields[1];
+                string username = fields[2];
+                string membership = fields[4];
+
+                bool matchFound = name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                  surname.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                  username.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                  membership.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+
+                Console.ForegroundColor = matchFound ? searchHighlightColor : Console.ForegroundColor;
+                Console.WriteLine($"| {name,-20} | {surname,-20} | {username,-20} | {membership,-20} |");
+                Console.ResetColor();
+                Console.WriteLine(new string(separator, tableWidth));
+            }
+
+            Console.WriteLine();
+
+            OptionsAfterSearch(file);
+        }
+
+        public static void OptionsAfterSearch(StreamWriter file)
+        {
+            Console.WriteLine("Choose what to do next:");
+            Console.WriteLine("1. Search again");
+            Console.WriteLine("2. Sort the table");
+            Console.WriteLine("3. Go back to the admin menu");
+
+            string optionAfterSearch = Console.ReadLine();
+            switch (optionAfterSearch)
+            {
+                case "1":
+                    Console.Clear();
+                    SearchAndPrintTable(ReadFileContents("user.txt"), file);
+                    break;
+                case "2":
+                    Console.Clear();
+                    PrintFile("user.txt", "User", file);
+                    break;
+                case "3":
+                    file.Close(); // Close the file
+                    Console.Clear();
+                    var adminCommands = new AdminFeatures();
+                    adminCommands.AdminCommands(file);
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    Thread.Sleep(1500); // 1.5s sleep
+                    Console.Clear();
+                    OptionsAfterSearch(file);
+                    break;
+            }
+        }
+
+        public static void SortData(List<string> fileData, string sortOption)
+        {
+            switch (sortOption)
+            {
+                case "1":
+                    fileData.Sort((a, b) =>
+                    {
+                        string[] fieldsA = a.Split(',');
+                        string[] fieldsB = b.Split(',');
+                        return string.Compare(fieldsA[0], fieldsB[0], StringComparison.OrdinalIgnoreCase);
+                    });
+                    break;
+                case "2":
+                    fileData.Sort((a, b) =>
+                    {
+                        string[] fieldsA = a.Split(',');
+                        string[] fieldsB = b.Split(',');
+                        return string.Compare(fieldsA[1], fieldsB[1], StringComparison.OrdinalIgnoreCase);
+                    });
+                    break;
+                case "3":
+                    fileData.Sort((a, b) =>
+                    {
+                        string[] fieldsA = a.Split(',');
+                        string[] fieldsB = b.Split(',');
+                        return string.Compare(fieldsA[4], fieldsB[4], StringComparison.OrdinalIgnoreCase);
+                    });
+                    break;
+                default:
+                    Console.WriteLine("Invalid sort option. Defaulting to sort by name.");
+                    fileData.Sort((a, b) =>
+                    {
+                        string[] fieldsA = a.Split(',');
+                        string[] fieldsB = b.Split(',');
+                        return string.Compare(fieldsA[0], fieldsB[0], StringComparison.OrdinalIgnoreCase);
+                    });
                     break;
             }
         }

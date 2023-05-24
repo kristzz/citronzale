@@ -1,2 +1,3 @@
-krists,emils,kristzz,Qw1jTBE7C/qUzy9j2iVkFGNJKAdEE+Y9sbuBAY4tJl4=,Deluxe, 2. Bumbieru iela 12, Pļavinieki,3. Maiznieku iela 2, Bolderāja
-fretka,maris,fretka,BLEwxNTR0mpBY+RJ8zLy1v3ZhlEM7aeNGYImQqhHAUc=,Flex, 3. Maiznieku iela 2, Bolderāja
+janis,fernats,stiprinieks,ELV0ye+VDp31g3b2tXNayLlGMyX7yRNuRCS4rbTqVvk=,Regular, Maiznieku iela 2 Bolderāja,Maskavas iela 64 Imanta,Bumbieru iela 12 Pļavinieki
+krists,emils,kristzz,C+xZ15An8ykxPyHzVa/mzvx6SFwLM7aGW0duIzAE7s0=,Flex, Maskavas iela 64 Imanta,Bumbieru iela 12 Pļavinieki
+zena,kursevs,zena,L50tIPYMLRL1F2tnb+V9hMmWApD7eo17MVj12j29NvU=,Super, Bumbieru iela 12 Pļavinieki

@@ -29,19 +29,19 @@ namespace Locations
             {
                 case "1":
                     Console.WriteLine("1. Maskavas iela 64, Imanta");
-                    location = "1. Maskavas iela 64, Imanta";
+                    location = "Maskavas iela 64 Imanta";
                     fields = AddLocationToFields(fields, location);
                     ShowLocation(location);
                     break;
                 case "2":
                     Console.WriteLine("2. Bumbieru iela 12, Pļavinieki");
-                    location = "2. Bumbieru iela 12, Pļavinieki";
+                    location = "Bumbieru iela 12 Pļavinieki";
                     fields = AddLocationToFields(fields, location);
                     ShowLocation(location);
                     break;
                 case "3":
                     Console.WriteLine("3. Maiznieku iela 2, Bolderāja");
-                    location = "3. Maiznieku iela 2, Bolderāja";
+                    location = "Maiznieku iela 2 Bolderāja";
                     fields = AddLocationToFields(fields, location);
                     ShowLocation(location);
                     break;

@@ -19,7 +19,6 @@ namespace LogSignIn
         const string fileName = "user.txt";
 
         private static string filePath = "user.txt";
-        private static StreamWriter file;
 
         public static void Main(string[] args)
         {
@@ -93,51 +92,7 @@ namespace LogSignIn
                 Console.WriteLine("Login successful!");
                 Thread.Sleep(2000); // sleep 2 seconds
                 Console.Clear();
-                LoggedInOptions();
-
-                void LoggedInOptions()
-                {
-                    Console.WriteLine("======================================================================");
-                    Console.WriteLine("1. View profile");
-                    Console.WriteLine("2. Log out");
-                    Console.WriteLine("======================================================================");
-
-                    string choice = Console.ReadLine();
-
-                    string targetUsername = username;
-
-                    bool stopProgram = false;
-
-                    while (!stopProgram)
-                    {
-
-                        switch (choice)
-                        {
-                            case "1":
-                                Console.Clear();
-                                UserInfoReader.ReadUserInfo(fileName, targetUsername);
-                                Console.WriteLine();
-                                Console.WriteLine("Press any key to return to the selection...");
-                                Console.ReadKey();
-                                Console.Clear();
-                                LoggedInOptions();
-                                return;
-
-                            case "2":
-                                Console.Clear();
-                                Options();
-                                break;
-
-                            default:
-                                Console.Clear();
-                                Console.WriteLine("Invalid choice! Please try again.");
-                                Thread.Sleep(1500);
-                                Console.Clear();
-                                LoggedInOptions();
-                                break;
-                        }
-                    }
-                }
+                LoggedInOptions(username);
             }
             else if (username == "admin" && password == "admin")
             {
@@ -196,6 +151,54 @@ namespace LogSignIn
             Thread.Sleep(1500); //1.5s sleep
             Console.Clear();
             Options();
+        }
+
+        public void LoggedInOptions(string username)
+        {
+            Console.WriteLine("======================================================================");
+            Console.WriteLine("1. View profile");
+            Console.WriteLine("2. Edit your profile");
+            Console.WriteLine("3. Log out");
+            Console.WriteLine("======================================================================");
+
+            string choice = Console.ReadLine();
+            string targetUsername = username;
+            bool stopProgram = false;
+
+            while (!stopProgram)
+            {
+
+                switch (choice)
+                {
+                    case "1":
+                        Console.Clear();
+                        UserInfoReader.ReadUserInfo(fileName, targetUsername);
+                        Console.WriteLine();
+                        Console.WriteLine("Press any key to return to the selection...");
+                        Console.ReadKey();
+                        Console.Clear();
+                        LoggedInOptions(username);
+                        return;
+
+                    case "2":
+                        Console.Clear();
+                        UserInfoReader.EditUserProfile(filePath, targetUsername);
+                        break;
+
+                    case "3":
+                        Console.Clear();
+                        Options();
+                        break;
+
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Invalid choice! Please try again.");
+                        Thread.Sleep(1500);
+                        Console.Clear();
+                        LoggedInOptions(username);
+                        break;
+                }
+            }
         }
 
         static string GetMembershipOption()
