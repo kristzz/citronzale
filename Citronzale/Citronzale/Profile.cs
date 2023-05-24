@@ -46,10 +46,11 @@ namespace Profile
                     }
                 }
             }
-
             Console.WriteLine("User not found.");
         }
+
         private static string newLocation;
+        private static string newMembership;
         public static void EditUserProfile(string filePath, string targetUsername)
         {
             var signedInoptions = new LogSign();
@@ -68,51 +69,35 @@ namespace Profile
                 if (username == targetUsername)
                 {
                     Console.WriteLine("What do you want to edit/change?");
+                    Console.WriteLine("======================================================================");
                     Console.WriteLine("1. Password");
                     Console.WriteLine("2. Gym location");
                     Console.WriteLine("3. Membership");
                     Console.WriteLine("4. Exit");
+                    Console.WriteLine("======================================================================");
 
                     string editChoice = Console.ReadLine();
 
                     switch (editChoice)
                     {
                         case "1":
+                            Console.Clear();
                             Console.WriteLine("Enter a new password: ");
                             string newPassword = ReadPassword();
                             string hashedPassword = HashPassword(newPassword);
                             fields[3] = hashedPassword;
                             Console.WriteLine("Password updated successfully.");
+                            Thread.Sleep(1000);
                             break;
 
                         case "2":
-                            Console.WriteLine("Enter a new gym location: (choose from 1-3 with numbers");
-                            Console.WriteLine("======================================================================");
-                            Console.WriteLine("1. Maskavas iela 64, Imanta");
-                            Console.WriteLine("2. Bumbieru iela 12, P?avinieki");
-                            Console.WriteLine("3. Maiznieku iela 2, Bolder?ja");
-                            Console.WriteLine("======================================================================");
-                            string temp = Console.ReadLine();
-                            
-                            switch (temp)
-                            {
-                                case "1":
-                                    newLocation = "Maskavas iela 64. Imanta";
-                                    break;
-                                case "2":
-                                    newLocation = "Bumbieru iela 12. Plavinieki";
-                                    break;
-                                case "3":
-                                    newLocation = "Maiznieku iela 2. Bolderaja";
-                                    break;
-                            }
-                            fields[5] = newLocation;
-                            Console.WriteLine("Gym location updated successfully.");
+                            var changeLocation = new UserInfoReader();
+                            changeLocation.ChangeLocation(fields);
                             break;
 
                         case "3":
-                            Console.WriteLine("Enter the new membership you want to switch to (choose from 1-4 with numbers");
-                            string newMembership = Console.ReadLine();
+                            var changeMembership = new UserInfoReader();
+                            changeMembership.ChangeMembership(fields);
                             break;
 
                         case "4":
@@ -134,7 +119,6 @@ namespace Profile
             // Write the updated lines back to the file
             File.WriteAllLines(filePath, lines);
         }
-
 
         private static string ReadPassword()
         {
@@ -169,6 +153,70 @@ namespace Profile
                 byte[] hash = sha256.ComputeHash(bytes);
                 return Convert.ToBase64String(hash);
             }
+        }
+
+        public void ChangeLocation(string[] fields)
+        {
+            Console.Clear();
+            Console.WriteLine("Enter a new gym location: (choose from 1-3 with numbers)");
+            Console.WriteLine("======================================================================");
+            Console.WriteLine("1. Maskavas iela 64, Imanta");
+            Console.WriteLine("2. Bumbieru iela 12, P?avinieki");
+            Console.WriteLine("3. Maiznieku iela 2, Bolder?ja");
+            Console.WriteLine("======================================================================");
+            string temp = Console.ReadLine();
+
+            switch (temp)
+            {
+                case "1":
+                    newLocation = "Maskavas iela 64. Imanta";
+                    break;
+                case "2":
+                    newLocation = "Bumbieru iela 12. Plavinieki";
+                    break;
+                case "3":
+                    newLocation = "Maiznieku iela 2. Bolderaja";
+                    break;
+                default:
+                    break;
+            }
+            fields[5] = newLocation;
+            Console.WriteLine("Gym location updated successfully.");
+            Thread.Sleep(1000);
+        }
+
+        public void ChangeMembership(string[] fields)
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the new membership you want to switch to (choose from 1-4 with numbers)");
+            Console.WriteLine("======================================================================");
+            Console.WriteLine("1. Regular");
+            Console.WriteLine("2. Flex");
+            Console.WriteLine("3. Super");
+            Console.WriteLine("4. Deluxe");
+            Console.WriteLine("======================================================================");
+            string temp1 = Console.ReadLine();
+
+            switch (temp1)
+            {
+                case "1":
+                    newMembership = "Regular";
+                    break;
+                case "2":
+                    newMembership = "Flex";
+                    break;
+                case "3":
+                    newMembership = "Super";
+                    break;
+                case "4":
+                    newMembership = "Deluxe";
+                    break;
+                default:
+                    break;
+            }
+            fields[4] = newMembership;
+            Console.WriteLine("Gym membership type updated successfully");
+            Thread.Sleep(1000);
         }
     }
 }
