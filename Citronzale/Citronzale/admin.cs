@@ -328,20 +328,20 @@ namespace Citronzale.Admin
             {
                 string[] fields = line.Split(',');
 
-                string membershipOptions = fields[4];
+                string membershipOption = fields[4].Trim();
 
-                switch (membershipOptions)
+                switch (membershipOption)
                 {
-                    case "1":
+                    case "Regular":
                         regularMemberCount++;
                         break;
-                    case "2":
+                    case "Flex":
                         flexMemberCount++;
                         break;
-                    case "3":
+                    case "Super":
                         superMembersCount++;
                         break;
-                    case "4":
+                    case "Deluxe":
                         deluxeMembersCount++;
                         break;
                     default:
