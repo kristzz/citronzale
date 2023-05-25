@@ -112,7 +112,8 @@ namespace Profile
                         Console.WriteLine("2. Gym location");
                         Console.WriteLine("3. Membership");
                         Console.WriteLine("4. Change Trainer");
-                        Console.WriteLine("5. Return back");
+                        Console.WriteLine("5. Delete the account");
+                        Console.WriteLine("6. Return back");
                         Console.WriteLine("======================================================================");
 
                         string editChoice = Console.ReadLine();
@@ -144,8 +145,12 @@ namespace Profile
 
                             case "5":
                                 Console.Clear();
-                                signedInoptions.LoggedInOptions(targetUsername);
+                                DeleteUserAccount(filePath, targetUsername);
                                 return;
+                            case "6":
+                                Console.Clear();
+                                signedInoptions.LoggedInOptions(targetUsername);
+                                break;
 
                             default:
                                 Console.WriteLine("Invalid choice.");
@@ -284,6 +289,65 @@ namespace Profile
                 default:
                     Console.WriteLine("Invalid choice.");
                     break;
+            }
+        }
+
+        public static void DeleteUserAccount(string filePath, string targetUsername)
+        {
+            var signedInoptions = new LogSign();
+            try
+            {
+                string[] lines = File.ReadAllLines(filePath);
+
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    string line = lines[i];
+                    string[] fields = line.Split(',');
+
+                    if (fields.Length >= 7 && fields[2] == targetUsername)
+                    {
+                        Console.WriteLine("Are you sure you want to delete your account? (Y/N)");
+                        string choice = Console.ReadLine();
+
+                        if (choice.ToLower() == "y")
+                        {
+                            lines[i] = string.Empty; // Clear the line by setting it to an empty string
+                            Console.WriteLine("Account deleted successfully.");
+                            Thread.Sleep(2000);
+                            Console.Clear();
+                            var goBackToStart = new LogSign();
+                            goBackToStart.Starter();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Account deletion cancelled.");
+                            Thread.Sleep(2000);
+                            signedInoptions.LoggedInOptions(targetUsername);
+                        }
+
+                        // Remove empty lines from the array
+                        lines = lines.Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
+
+                        File.WriteAllLines(filePath, lines);
+                        Console.Clear();
+                        signedInoptions.LoggedInOptions(targetUsername);
+                        return;
+                    }
+                }
+
+                Console.WriteLine("User not found.");
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("User file not found.");
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("Error reading or writing user file.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("Access to user file denied.");
             }
         }
     }
