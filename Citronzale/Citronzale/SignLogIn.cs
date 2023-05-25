@@ -10,6 +10,7 @@ using Profile;
 using Citronzale.Admin;
 using Citronzale;
 using Locations;
+using Trainers;
 
 namespace LogSignIn
 {
@@ -123,8 +124,12 @@ namespace LogSignIn
             string username = Console.ReadLine();
             Console.Write("Enter your password: ");
             string password = ReadPassword();
+
             GymLocations gymLocations = new GymLocations();
             string location = gymLocations.ChooseLocation();
+
+            GymTrainers gymTrainers = new GymTrainers();
+            string trainer = gymTrainers.ChooseTrainer();
 
             if (userCredentials.ContainsKey(username))
             {
@@ -144,7 +149,7 @@ namespace LogSignIn
             userCredentials[username] = hashedPassword;
 
             // Save user information in a text file
-            string userData = $"{name},{surname},{username},{hashedPassword},{membership}, {location}";
+            string userData = $"{name},{surname},{username},{hashedPassword},{membership},{location},{trainer}";
             SaveUserData(userData);
 
             Console.WriteLine("Sign up successful! You can now log in!");
@@ -203,12 +208,12 @@ namespace LogSignIn
 
         static string GetMembershipOption()
         {
+            Console.WriteLine("Choose your membership option (1-4): ");
             Console.WriteLine("Membership Options:");
             Console.WriteLine("1. Regular");
             Console.WriteLine("2. Flex");
             Console.WriteLine("3. Super");
             Console.WriteLine("4. Deluxe");
-            Console.Write("Choose your membership option (1-4): ");
             string membershipOption = Console.ReadLine();
 
             // Validate membership option
@@ -301,5 +306,7 @@ namespace LogSignIn
             Console.WriteLine();
             return password.ToString();
         }
+
+        
     }
 }

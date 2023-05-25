@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Citronzale",
+    "\\Citronzale\\Citronzale"
   ],
-  "SelectedNode": "\\Citronzale.sln (Citronzale\\Citronzale.sln)",
+  "SelectedNode": "\\Citronzale\\Citronzale\\Profile.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -1,9 +1,10 @@
 using LogSignIn;
 using System;
 using System.IO;
-using System.Security;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
+using Trainers;
 
 namespace Profile
 {
@@ -11,114 +12,50 @@ namespace Profile
     {
         public static void ReadUserInfo(string filePath, string targetUsername)
         {
-            // Attempt to open the file with FileShare.ReadWrite flag to allow reading while it is open by another process
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            try
             {
-                // Read the contents of the text file
+                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (var reader = new StreamReader(fileStream))
                 {
                     string line;
                     while ((line = reader.ReadLine()) != null)
                     {
-                        string[] fields = line.Split(','); // Split the line using the comma as the delimiter
+                        string[] fields = line.Split(',');
 
-                        // Assuming the order of fields is: name, last name, username, password, and additional details
-                        string name = fields[0];
-                        string lastName = fields[1];
-                        string username = fields[2];
-                        string additionalDetails = fields[4];
-                        string location = fields[5];
-
-                        if (username == targetUsername)
+                        if (fields.Length >= 7)
                         {
-                            Console.WriteLine("======================================================================");
+                            string username = fields[2];
 
-                            Console.WriteLine("Name: " + name);
-                            Console.WriteLine("Last Name: " + lastName);
-                            Console.WriteLine("Username: " + username);
-                            Console.WriteLine("Subscription type: " + additionalDetails);
-                            Console.WriteLine("Location: " + location);
-
-                            Console.WriteLine("======================================================================");
-                            Console.WriteLine();
-                            return; // Exit the method after finding the matching profile
+                            if (username == targetUsername)
+                            {
+                                Console.WriteLine("======================================================================");
+                                Console.WriteLine("Name: " + fields[0]);
+                                Console.WriteLine("Last Name: " + fields[1]);
+                                Console.WriteLine("Username: " + fields[2]);
+                                Console.WriteLine("Subscription type: " + fields[4]);
+                                Console.WriteLine("Location: " + fields[5]);
+                                Console.WriteLine("Trainer: " + fields[6]);
+                                Console.WriteLine("======================================================================\n");
+                                return;
+                            }
                         }
                     }
                 }
+
+                Console.WriteLine("User not found.");
             }
-            Console.WriteLine("User not found.");
-        }
-
-        private static string newLocation;
-        private static string newMembership;
-        public static void EditUserProfile(string filePath, string targetUsername)
-        {
-            var signedInoptions = new LogSign();
-            
-            // Read all the lines from the file
-            string[] lines = File.ReadAllLines(filePath);
-
-            // Iterate over each line and find the target user
-            for (int i = 0; i < lines.Length; i++)
+            catch (FileNotFoundException)
             {
-                string line = lines[i];
-                string[] fields = line.Split(',');
-
-                string username = fields[2];
-
-                if (username == targetUsername)
-                {
-                    Console.WriteLine("What do you want to edit/change?");
-                    Console.WriteLine("======================================================================");
-                    Console.WriteLine("1. Password");
-                    Console.WriteLine("2. Gym location");
-                    Console.WriteLine("3. Membership");
-                    Console.WriteLine("4. Return back");
-                    Console.WriteLine("======================================================================");
-
-                    string editChoice = Console.ReadLine();
-
-                    switch (editChoice)
-                    {
-                        case "1":
-                            Console.Clear();
-                            Console.WriteLine("Enter a new password: ");
-                            string newPassword = ReadPassword();
-                            string hashedPassword = HashPassword(newPassword);
-                            fields[3] = hashedPassword;
-                            Console.WriteLine("Password updated successfully.");
-                            Console.WriteLine("Your new password will be active after you reopen our app");
-                            Thread.Sleep(2000);
-                            break;
-
-                        case "2":
-                            var changeLocation = new UserInfoReader();
-                            changeLocation.ChangeLocation(fields);
-                            break;
-
-                        case "3":
-                            var changeMembership = new UserInfoReader();
-                            changeMembership.ChangeMembership(fields);
-                            break;
-
-                        case "4":
-                            Console.Clear();
-                            signedInoptions.LoggedInOptions(targetUsername);
-                            return;
-
-                        default:
-                            Console.WriteLine("Invalid choice.");
-                            return;
-                    }
-
-                    // Update the modified line in the lines array
-                    lines[i] = string.Join(",", fields);
-                    break;
-                }
+                Console.WriteLine("User file not found.");
             }
-
-            // Write the updated lines back to the file
-            File.WriteAllLines(filePath, lines);
+            catch (IOException)
+            {
+                Console.WriteLine("Error reading user file.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("Access to user file denied.");
+            }
         }
 
         private static string ReadPassword()
@@ -155,69 +92,199 @@ namespace Profile
                 return Convert.ToBase64String(hash);
             }
         }
+        public static void EditUserProfile(string filePath, string targetUsername)
+        {
+            var signedInoptions = new LogSign();
+            try
+            {
+                string[] lines = File.ReadAllLines(filePath);
 
-        public void ChangeLocation(string[] fields)
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    string line = lines[i];
+                    string[] fields = line.Split(',');
+
+                    if (fields.Length >= 7 && fields[2] == targetUsername)
+                    {
+                        Console.WriteLine("What do you want to edit/change?");
+                        Console.WriteLine("======================================================================");
+                        Console.WriteLine("1. Password");
+                        Console.WriteLine("2. Gym location");
+                        Console.WriteLine("3. Membership");
+                        Console.WriteLine("4. Change Trainer");
+                        Console.WriteLine("5. Return back");
+                        Console.WriteLine("======================================================================");
+
+                        string editChoice = Console.ReadLine();
+
+                        switch (editChoice)
+                        {
+                            case "1":
+                                Console.Clear();
+                                Console.WriteLine("Enter a new password: ");
+                                string newPassword = ReadPassword();
+                                string hashedPassword = HashPassword(newPassword);
+                                fields[3] = hashedPassword;
+                                Console.WriteLine("Password updated successfully.");
+                                Console.WriteLine("Your new password will be active after you reopen our app");
+                                Thread.Sleep(2000);
+                                break;
+
+                            case "2":
+                                ChangeLocation(fields);
+                                break;
+
+                            case "3":
+                                ChangeMembership(fields);
+                                break;
+
+                            case "4":
+                                ChangeTrainer(fields);
+                                break;
+
+                            case "5":
+                                Console.Clear();
+                                signedInoptions.LoggedInOptions(targetUsername);
+                                return;
+
+                            default:
+                                Console.WriteLine("Invalid choice.");
+                                break;
+                        }
+
+                        lines[i] = string.Join(",", fields);
+                        break;
+                    }
+                }
+
+                File.WriteAllLines(filePath, lines);
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("User file not found.");
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("Error reading or writing user file.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("Access to user file denied.");
+            }
+        }
+
+        private static void ChangeLocation(string[] fields)
         {
             Console.Clear();
-            Console.WriteLine("Enter a new gym location: (choose from 1-3 with numbers)");
+            Console.WriteLine("Enter a new gym location (choose from 1-3):");
             Console.WriteLine("======================================================================");
-            Console.WriteLine("1. Maskavas iela 64, Imanta");
-            Console.WriteLine("2. Bumbieru iela 12, P?avinieki");
-            Console.WriteLine("3. Maiznieku iela 2, Bolder?ja");
+            Console.WriteLine("1. Maskavas iela 64. Imanta");
+            Console.WriteLine("2. Bumbieru iela 12. Plavinieki");
+            Console.WriteLine("3. Maiznieku iela 2. Bolderaja");
             Console.WriteLine("======================================================================");
             string temp = Console.ReadLine();
 
             switch (temp)
             {
                 case "1":
-                    newLocation = "Maskavas iela 64. Imanta";
+                    fields[5] = "Maskavas iela 64. Imanta";
+                    Console.WriteLine("Gym location updated successfully.");
+                    Thread.Sleep(1000);
                     break;
                 case "2":
-                    newLocation = "Bumbieru iela 12. Plavinieki";
+                    fields[5] = "Bumbieru iela 12. Plavinieki";
+                    Console.WriteLine("Gym location updated successfully.");
+                    Thread.Sleep(1000);
                     break;
                 case "3":
-                    newLocation = "Maiznieku iela 2. Bolderaja";
+                    fields[5] = "Maiznieku iela 2. Bolderaja";
+                    Console.WriteLine("Gym location updated successfully.");
+                    Thread.Sleep(1000);
                     break;
                 default:
+                    Console.WriteLine("Invalid choice.");
                     break;
             }
-            fields[5] = newLocation;
-            Console.WriteLine("Gym location updated successfully.");
-            Thread.Sleep(1000);
         }
 
-        public void ChangeMembership(string[] fields)
+        private static void ChangeTrainer(string[] fields)
         {
             Console.Clear();
-            Console.WriteLine("Enter the new membership you want to switch to (choose from 1-4 with numbers)");
+            Console.WriteLine("Enter a new trainer (choose from 1-4):");
+            Console.WriteLine("======================================================================");
+            Console.WriteLine("1. Antons Kalns");
+            Console.WriteLine("2. Grigorijs Mats");
+            Console.WriteLine("3. Ina Mina");
+            Console.WriteLine("4. Lana Sika");
+            Console.WriteLine("======================================================================");
+            string temp = Console.ReadLine();
+
+            switch (temp)
+            {
+                case "1":
+                    fields[6] = "Antons Kalns";
+                    Console.WriteLine("Trainer updated successfully.");
+                    Thread.Sleep(1000);
+                    break;
+                case "2":
+                    fields[6] = "Grigorijs Mats";
+                    Console.WriteLine("Trainer updated successfully.");
+                    Thread.Sleep(1000);
+                    break;
+                case "3":
+                    fields[6] = "Ina Mina";
+                    Console.WriteLine("Trainer updated successfully.");
+                    Thread.Sleep(1000);
+                    break;
+                case "4":
+                    fields[6] = "Lana Sika";
+                    Console.WriteLine("Trainer updated successfully.");
+                    Thread.Sleep(1000);
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
+            }
+        }
+
+        private static void ChangeMembership(string[] fields)
+        {
+            Console.Clear();
+            Console.WriteLine("Enter the new membership you want to switch to (choose from 1-4):");
             Console.WriteLine("======================================================================");
             Console.WriteLine("1. Regular");
             Console.WriteLine("2. Flex");
             Console.WriteLine("3. Super");
             Console.WriteLine("4. Deluxe");
             Console.WriteLine("======================================================================");
-            string temp1 = Console.ReadLine();
+            string temp = Console.ReadLine();
 
-            switch (temp1)
+            switch (temp)
             {
                 case "1":
-                    newMembership = "Regular";
+                    fields[4] = "Regular";
+                    Console.WriteLine("Membership type updated successfully.");
+                    Thread.Sleep(1000);
                     break;
                 case "2":
-                    newMembership = "Flex";
+                    fields[4] = "Flex";
+                    Console.WriteLine("Membership type updated successfully.");
+                    Thread.Sleep(1000);
                     break;
                 case "3":
-                    newMembership = "Super";
+                    fields[4] = "Super";
+                    Console.WriteLine("Membership type updated successfully.");
+                    Thread.Sleep(1000);
                     break;
                 case "4":
-                    newMembership = "Deluxe";
+                    fields[4] = "Deluxe";
+                    Console.WriteLine("Membership type updated successfully.");
+                    Thread.Sleep(1000);
                     break;
                 default:
+                    Console.WriteLine("Invalid choice.");
                     break;
             }
-            fields[4] = newMembership;
-            Console.WriteLine("Gym membership type updated successfully");
-            Thread.Sleep(1000);
         }
     }
 }

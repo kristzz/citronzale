@@ -2,6 +2,7 @@
 using LogSignIn;
 using System;
 using System.IO;
+using System.Text;
 
 namespace Locations
 {
@@ -14,11 +15,9 @@ namespace Locations
             string location;
             string choice;
 
-            Console.WriteLine("Choose your location (write region name)");
+            Console.WriteLine("Choose your location (write number 1-3)");
             Console.WriteLine("======================================================================");
-            Console.WriteLine("1. Maskavas iela 64, Imanta");
-            Console.WriteLine("2. Bumbieru iela 12, Pļavinieki");
-            Console.WriteLine("3. Maiznieku iela 2, Bolderāja");
+            PrintLocations();
             Console.WriteLine("======================================================================");
 
             choice = Console.ReadLine();
@@ -26,22 +25,16 @@ namespace Locations
             switch (choice)
             {
                 case "1":
-                    Console.WriteLine("1. Maskavas iela 64, Imanta");
                     location = "Maskavas iela 64. Imanta";
                     fields = AddLocationToFields(fields, location);
-                    DisplayLocation(location);
                     break;
                 case "2":
-                    Console.WriteLine("2. Bumbieru iela 12, Pļavinieki");
                     location = "Bumbieru iela 12. Pļavinieki";
                     fields = AddLocationToFields(fields, location);
-                    DisplayLocation(location);
                     break;
                 case "3":
-                    Console.WriteLine("3. Maiznieku iela 2, Bolderāja");
                     location = "Maiznieku iela 2. Bolderāja";
                     fields = AddLocationToFields(fields, location);
-                    DisplayLocation(location);
                     break;
                 default:
                     Console.WriteLine("Incorrect option. Please try again!");
@@ -74,9 +67,11 @@ namespace Locations
             return fields;
         }
 
-        private void DisplayLocation(string location)
+        public void PrintLocations()
         {
-            Console.WriteLine("Location: " + location);
+            var path = "locations.txt";
+            string content = File.ReadAllText(path, Encoding.UTF8);
+            Console.WriteLine(content);
         }
     }
 }

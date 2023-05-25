@@ -1,7 +1,7 @@
-girts,gagninis,girts,mR6jw9roPVMx+bKSLpoQWbrCg+tpwoh1atoTBRoh/+I=,Regular, Maiznieku iela 2. Bolderāja
-guntis,gutmanis,guapo,3UMfh15wSjsI1duR8cewt/RlgTuH87R2YrdwPYUdHjw=,Flex,Maiznieku iela 2. Bolderaja
-janis,fernats,janka,RSGrcSfesx3YlfZqWzRhoXwwwYtEDyLxDH5Cap+9OMA=,Flex,Maiznieku iela 2. Bolderāja
-krists,emils,kristzz,9dWV2XyoLRD5+UBrGFkVJ440veDk247yEAawkZHb5Q8=,Super,Maskavas iela 64. Imanta
-martins,leja,duzis,QGjUYA5Uo3cr5kxAxu1rT63rql1ZGMxc/Ds2LI0rkYw=,Regular,Bumbieru iela 12. Pļavinieki
-raitis,jerma,raitis,ofdMVGOMlQpKm4ZJ5Fgnx2YCWWa4oXZOi2iFnINjsBc=,Super,Maiznieku iela 2. Bolderāja
-zena,kursevs,zena,SgK0eTpl3P4L77K3Bd0jYLyHVBdC6e0Kq5DRwuTbi2M=,Deluxe,Bumbieru iela 12. Pļavinieki
+parbaude4,parbaude4,parbaude4,ws6VX+8TTtGHnnglASmN0tSWzecv0gBSAeBDX5+4fxA=,Super,Ina Mina
+krists,emils,kristzz,C+xZ15An8ykxPyHzVa/mzvx6SFwLM7aGW0duIzAE7s0=,Deluxe,Ina Mina
+martins,leja,duzis,NJqHLxPDipwZfnJ+Qb41s4VyRPeRut6UtUZa0kGgVAc=,Deluxe,Antons Kalns
+guntis,gutmanis,guapo,gyFJRShCQRFahobq83wyfm2uDtqTm7MEn6koQDv+lcE=,Deluxe,Ina Mina
+raitis,jerma,jermasdels,m/uA36Ymb6k9cOQ/PBKKHPsAA25Pqtl9Q3KN1aFevc0=,Super,Maskavas iela 64. Imanta,Lana Sika
+sergejs,makarovs,makarovs,AZ5ic8BnQo7f78ArmrYGyhSF0X78kjxD53CS83uSHF4=,Deluxe,Maskavas iela 64. Imanta,Antons Kalns
+roberts,salajevs,roba,ne0nfyMsnk3GG1tietrCHpjm4Y3doLhdZ7R3AUPEw7g=,Deluxe,Maskavas iela 64. Imanta,Antons Kalns
