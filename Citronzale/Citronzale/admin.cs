@@ -144,6 +144,8 @@ namespace Citronzale.Admin
             }
 
             Console.WriteLine();
+
+            ShowUserCount(fileData);
         }
 
         private static List<string> ReadFileContents(string filePath)
@@ -312,6 +314,48 @@ namespace Citronzale.Admin
                     });
                     break;
             }
+        }
+
+        public static void ShowUserCount(List<string> fileData)
+        {
+            int allMemberCount = 0;
+            int regularMemberCount = 0;
+            int flexMemberCount = 0;
+            int superMembersCount = 0;
+            int deluxeMembersCount = 0;
+
+            foreach (string line in fileData)
+            {
+                string[] fields = line.Split(',');
+
+                string membershipOptions = fields[4];
+
+                switch (membershipOptions)
+                {
+                    case "1":
+                        regularMemberCount++;
+                        break;
+                    case "2":
+                        flexMemberCount++;
+                        break;
+                    case "3":
+                        superMembersCount++;
+                        break;
+                    case "4":
+                        deluxeMembersCount++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            allMemberCount = regularMemberCount + flexMemberCount + superMembersCount + deluxeMembersCount;
+
+            Console.WriteLine("Users using regular membership: " + regularMemberCount);
+            Console.WriteLine("Users using flex membership: " + flexMemberCount);
+            Console.WriteLine("Users using super membership: " + superMembersCount);
+            Console.WriteLine("Users using deluxe membership: " + deluxeMembersCount);
+            Console.WriteLine("Total number of users: " + allMemberCount);
         }
     }
 }

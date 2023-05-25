@@ -1,6 +1,7 @@
+guntis,gutmanis,guapo,gyFJRShCQRFahobq83wyfm2uDtqTm7MEn6koQDv+lcE=,Deluxe,Ina Mina
 krists,emils,kristzz,C+xZ15An8ykxPyHzVa/mzvx6SFwLM7aGW0duIzAE7s0=,Deluxe,Ina Mina
 martins,leja,duzis,NJqHLxPDipwZfnJ+Qb41s4VyRPeRut6UtUZa0kGgVAc=,Deluxe,Antons Kalns
-guntis,gutmanis,guapo,gyFJRShCQRFahobq83wyfm2uDtqTm7MEn6koQDv+lcE=,Deluxe,Ina Mina
-sergejs,makarovs,makarovs,AZ5ic8BnQo7f78ArmrYGyhSF0X78kjxD53CS83uSHF4=,Deluxe,Maskavas iela 64. Imanta,Lana Sika
 parbaude4,parbaude4,parbaude4,ws6VX+8TTtGHnnglASmN0tSWzecv0gBSAeBDX5+4fxA=,Super,Ina Mina
 raitis,jerma,jermasdels,m/uA36Ymb6k9cOQ/PBKKHPsAA25Pqtl9Q3KN1aFevc0=,Super,Maskavas iela 64. Imanta,Lana Sika
+roberts,salajevs,roba,ne0nfyMsnk3GG1tietrCHpjm4Y3doLhdZ7R3AUPEw7g=,Deluxe,Maskavas iela 64. Imanta,Antons Kalns
+sergejs,makarovs,makarovs,AZ5ic8BnQo7f78ArmrYGyhSF0X78kjxD53CS83uSHF4=,Deluxe,Maskavas iela 64. Imanta,Antons Kalns
