@@ -314,15 +314,11 @@ namespace Profile
                             lines[i] = string.Empty; // Clear the line by setting it to an empty string
                             Console.WriteLine("Account deleted successfully.");
                             Thread.Sleep(2000);
-                            Console.Clear();
-                            var goBackToStart = new LogSign();
-                            goBackToStart.Starter();
                         }
                         else
                         {
                             Console.WriteLine("Account deletion cancelled.");
                             Thread.Sleep(2000);
-                            signedInoptions.LoggedInOptions(targetUsername);
                         }
 
                         // Remove empty lines from the array
